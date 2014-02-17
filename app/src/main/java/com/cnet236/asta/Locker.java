@@ -1,18 +1,18 @@
 package com.cnet236.asta;
 
-    import android.content.Context;
-    import android.util.Log;
+import android.content.Context;
+import android.util.Log;
 
-    import java.io.FileInputStream;
-    import java.io.FileNotFoundException;
-    import java.io.FileOutputStream;
-    import java.security.SecureRandom;
-    import java.security.spec.KeySpec;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 
-    import javax.crypto.Cipher;
-    import javax.crypto.SecretKey;
-    import javax.crypto.SecretKeyFactory;
-    import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 public class Locker {
     private SecretKey key;
@@ -75,7 +75,7 @@ public class Locker {
         final int kLen = 256;
 
         try {
-            SecretKeyFactory sKF = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            SecretKeyFactory sKF = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             KeySpec keySpec = new PBEKeySpec(password, salt, iter, kLen);
             key = sKF.generateSecret(keySpec);
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class Locker {
         FileInputStream fi = null;
 
         try {
-            Log.v("Unlocker", "Opening file");
+            Log.v("Unlocker", "Opening file: "+fileName);
             fi = current.openFileInput(fileName);
         }
         catch (FileNotFoundException e) {
