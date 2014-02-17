@@ -16,9 +16,9 @@ package com.cnet236.asta;
 
 public class Locker {
     private SecretKey key;
-    private String target;
+    private final String target;
     private String fileData;
-    private Context current;
+    private final Context current;
 
     Locker(String fileName, String password, Context context) {
         current = context;
@@ -139,7 +139,7 @@ public class Locker {
         return fileData;
     }
 
-    public void encryptFileData() {
+    private void encryptFileData() {
         Log.v("Unlocker", "Encrypting fileData: " + target);
         byte[] fileDataBytes;
         Cipher cipher;
