@@ -34,15 +34,6 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/email"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="@string/prompt_email" />
-
-            <EditText
                 android:id="@+id/password"
                 android:singleLine="true"
                 android:maxLines="1"
@@ -58,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in_register"
+                android:text="Authenticate"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:layout_gravity="right" />
