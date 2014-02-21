@@ -6,6 +6,9 @@ import android.util.Log;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
@@ -139,6 +142,23 @@ public class Locker {
         return fileData;
     }
 
+    public byte[] getKeyHash() {
+        MessageDigest thisHash;
+        byte[] thisBytes;
+
+
+        thisBytes = this.key.getEncoded();
+        try {
+            thisHash = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            Log.v("Unlocker", "no algo");
+            return null;
+        }
+        thisHash.update(thisBytes);
+
+        return thisHash.digest();
+
+    }
     private void encryptFileData() {
         Log.v("Unlocker", "Encrypting fileData: " + target);
         byte[] fileDataBytes;
@@ -170,5 +190,14 @@ public class Locker {
             Log.e("Unlocker", e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public boolean equals(Locker other) {
+        if(this.getKeyHash() == other.getKeyHash())
+            return true;
+
+        Log.d("Unlocker", this.getKeyHash().toString() + " : " + other.getKeyHash().toString());
+
+        return false;
     }
 }
