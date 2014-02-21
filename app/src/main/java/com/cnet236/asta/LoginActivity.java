@@ -190,17 +190,22 @@ public class LoginActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            EditText textV;
             try {
                 // TODO: code in auth process take pw -> create key -> get hash of key -> get hash of actual key from file -> compare hashes -> reject ? proceed with new activity
-                String password = findViewById(R.id.password).toString();
+
+                textV = (EditText) findViewById(R.id.password);
+                String password = textV.getText().toString();
+                Log.v("Unlocker", "password challenge: " + password);
                 Locker diplomat = new Locker("diplomat", password, getApplicationContext());
-                Locker guard = new Locker("guard", "hunter2", getApplicationContext());
+                Locker guard = new Locker("guard", "password", getApplicationContext());
                 if (guard.equals(diplomat) == true)
                     Log.i("Unlocker", "auth: allowed");
                 else
                     Log.i("Unlocker", "auth: denied");
             } catch (Exception e) {
+                Log.v("Unlocker", "login error");
+                e.printStackTrace();
                 return false;
             }
             return true;

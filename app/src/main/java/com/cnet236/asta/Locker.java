@@ -1,16 +1,19 @@
 package com.cnet236.asta;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -32,7 +35,7 @@ public class Locker {
 
     private void populateFileData() {
         FileInputStream fileInput = tryFile(target);
-        byte[] bytes = null;
+        byte[] encBytes = null;
 
         if(fileInput == null) {
             fileData = "";
@@ -40,7 +43,7 @@ public class Locker {
         }
 
         try {
-            int len = fileInput.read(bytes, 0, 200);
+            int len = fileInput.read(encBytes, 0, 200);
             Log.v("Unlocker", "bytes read: " + len);
             fileInput.close();
         } catch (Exception e) {
@@ -48,7 +51,7 @@ public class Locker {
             return;
         }
 
-        fileData = decodeFile(bytes);
+        fileData = decodeFile(encBytes);
     }
 
     private String decodeFile(byte[] bytes) {
@@ -90,10 +93,11 @@ public class Locker {
     private byte[] getSalt() {
         String fileName = "notencryptiondata";
         FileInputStream fileInput = tryFile(fileName);
-        byte[] salt = new byte[256];
+        byte[] salt = new byte[32];
 
         try {
-            fileInput.read(salt, 0, 256);
+            if (fileInput.read(salt, 0, 32) < 32)
+                throw new IOException("message");
         } catch (Exception e) {
             SecureRandom s = new SecureRandom();
             s.nextBytes(salt);
@@ -102,9 +106,14 @@ public class Locker {
             } catch(Exception e1) {
                 Log.d("Unlocker", "Couldn't close file, probably wasn't open");
             }
-            writeData(salt, fileName);
+            writeData(salt, fileName) ;
         }
 
+        StringBuilder sb = new StringBuilder();
+        for (byte b : salt)
+            sb.append(Integer.toHexString((int) (b & 0xff)));
+
+        Log.v("Unlocker", sb.toString());
         return salt;
     }
 
@@ -147,7 +156,8 @@ public class Locker {
         byte[] thisBytes;
 
 
-        thisBytes = this.key.getEncoded();
+        thisBytes = Base64.encode(this.key.getEncoded(), Base64.DEFAULT);
+
         try {
             thisHash = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
@@ -193,10 +203,18 @@ public class Locker {
     }
 
     public boolean equals(Locker other) {
-        if(this.getKeyHash() == other.getKeyHash())
+        StringBuffer thissb = new StringBuffer();
+        StringBuffer othersb = new StringBuffer();
+
+        for (byte b : this.getKeyHash())
+            thissb.append(Integer.toHexString((int) (b & 0xff)));
+        for (byte b : other.getKeyHash())
+            othersb.append(Integer.toHexString((int) (b & 0xff)));
+
+        if(Arrays.equals(this.getKeyHash(), other.getKeyHash()))
             return true;
 
-        Log.d("Unlocker", this.getKeyHash().toString() + " : " + other.getKeyHash().toString());
+        Log.d("Unlocker", thissb.toString() + " : " + othersb.toString());
 
         return false;
     }
