@@ -38,6 +38,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cnet236.asta.ControlListActivity" />
         </activity>
+        <activity
+            android:name="com.cnet236.asta.PasswordActivity"
+            android:label="@string/title_activity_password"
+            android:parentActivityName="com.cnet236.asta.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="LoginActivity" />
+        </activity>
     </application>
 
 </manifest>

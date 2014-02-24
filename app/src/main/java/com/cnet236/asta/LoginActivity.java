@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.File;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -48,11 +51,6 @@ public class LoginActivity extends Activity {
 
         setContentView(R.layout.activity_login);
 
-        // Set up the login form.
-        //mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-        //mEmailView = (EditText) findViewById(R.id.email);
-        //mEmailView.setText(mEmail);
-
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -75,6 +73,14 @@ public class LoginActivity extends Activity {
                 attemptLogin();
             }
         });
+
+        boolean firstRun = new File("notencryptiondata").exists();
+        if(firstRun) //{
+            Log.v("Unlocker", "First run detected");
+        //    Intent i = new Intent(LoginActivity.this, PasswordActivity.class);
+        //    LoginActivity.this.startActivity(i);
+        //}
+
     }
 
 
@@ -198,17 +204,21 @@ public class LoginActivity extends Activity {
                 String password = textV.getText().toString();
                 Log.v("Unlocker", "password challenge: " + password);
                 Locker diplomat = new Locker("diplomat", password, getApplicationContext());
+                //checkHash(diplomat.getKeyHash());
                 Locker guard = new Locker("guard", "password", getApplicationContext());
-                if (guard.equals(diplomat) == true)
+                if (guard.equals(diplomat) == true) {
                     Log.i("Unlocker", "auth: allowed");
-                else
+                    return true;
+                }
+                else {
                     Log.i("Unlocker", "auth: denied");
+                    return false;
+                }
             } catch (Exception e) {
                 Log.v("Unlocker", "login error");
                 e.printStackTrace();
                 return false;
             }
-            return true;
         }
 
         @Override
@@ -217,7 +227,8 @@ public class LoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                LoginActivity.this.startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -229,5 +240,10 @@ public class LoginActivity extends Activity {
             mAuthTask = null;
             showProgress(false);
         }
+
+        private boolean checkHash(byte[] diplomatHash) {
+            return false;
+        }
+
     }
 }
