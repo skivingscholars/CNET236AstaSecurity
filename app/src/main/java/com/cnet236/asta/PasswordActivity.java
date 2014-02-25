@@ -1,5 +1,7 @@
 package com.cnet236.asta;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class PasswordActivity extends ActionBarActivity {
 
@@ -70,13 +76,31 @@ public class PasswordActivity extends ActionBarActivity {
         }
     }
 
-    private void tryPassword() {
-        EditText pw = (EditText)findViewById(R.id.password), cpw = (EditText)findViewById(R.id.confirmPassword);
+    public void tryPassword() {
+        TextView pw = (TextView)findViewById(R.id.password), cpw = (TextView)findViewById(R.id.confirmPassword);
+        FileOutputStream file;
+        byte[] hash;
 
         if(pw.getText().toString() != cpw.getText().toString()) {
             EditText pass = (EditText) findViewById(R.id.newPassword);
             pass.setError(getString(R.string.passwordsdontmatch));
             pass.requestFocus();
+            return;
         }
+
+        Locker allowed = new Locker("diplomat", pw.getText().toString(), getApplicationContext());
+
+        try {
+            file = getApplicationContext().openFileOutput("allowedHash", Context.MODE_PRIVATE);
+            hash = allowed.getKeyHash();
+            file.write(hash, 0, hash.length);
+            file.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Intent i = new Intent(PasswordActivity.this, LoginActivity.class);
+        PasswordActivity.this.startActivity(i);
     }
 }

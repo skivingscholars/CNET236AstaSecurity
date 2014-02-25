@@ -39,7 +39,7 @@
                 android:id="@+id/password"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="match_parent"
+                android:layout_width="359dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
@@ -54,7 +54,7 @@
                 android:text="Authenticate"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:layout_gravity="right" />
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
 

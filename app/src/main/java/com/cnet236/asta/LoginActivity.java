@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,16 +19,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
- * Activity which displays a login screen to the user, offering registration as
- * well.
+ * Activity which displays a login screen to the user
  */
 public class LoginActivity extends Activity {
-    /**
-     * The default email to populate the email field with.
-     */
-    public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -74,12 +72,14 @@ public class LoginActivity extends Activity {
             }
         });
 
-        boolean firstRun = new File("notencryptiondata").exists();
-        if(firstRun) //{
+        try {
+            getApplicationContext().openFileInput("allowedHash");
+            Log.v("Unlocker", "Previous run detected.");
+        } catch(FileNotFoundException e) {
             Log.v("Unlocker", "First run detected");
-        //    Intent i = new Intent(LoginActivity.this, PasswordActivity.class);
-        //    LoginActivity.this.startActivity(i);
-        //}
+            Intent i = new Intent(LoginActivity.this, PasswordActivity.class);
+            LoginActivity.this.startActivity(i);
+        }
 
     }
 
@@ -204,8 +204,8 @@ public class LoginActivity extends Activity {
                 String password = textV.getText().toString();
                 Log.v("Unlocker", "password challenge: " + password);
                 Locker diplomat = new Locker("diplomat", password, getApplicationContext());
-                //checkHash(diplomat.getKeyHash());
-                Locker guard = new Locker("guard", "password", getApplicationContext());
+                return checkHash(diplomat.getKeyHash());
+                /*Locker guard = new Locker("guard", "password", getApplicationContext());
                 if (guard.equals(diplomat) == true) {
                     Log.i("Unlocker", "auth: allowed");
                     return true;
@@ -213,7 +213,7 @@ public class LoginActivity extends Activity {
                 else {
                     Log.i("Unlocker", "auth: denied");
                     return false;
-                }
+                }*/
             } catch (Exception e) {
                 Log.v("Unlocker", "login error");
                 e.printStackTrace();
@@ -242,8 +242,31 @@ public class LoginActivity extends Activity {
         }
 
         private boolean checkHash(byte[] diplomatHash) {
+            FileInputStream allowed;
+            byte[] allowedHash = new byte[256];
+
+            try {
+                allowed = getApplicationContext().openFileInput("allowedHash");
+                allowed.read(allowedHash, 0, 256);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.v("Unlocker", "diplomatHash = "+byteToString(diplomatHash));
+            Log.v("Unlocker", "allowedHash =  "+byteToString(allowedHash));
+
+            if(allowedHash == diplomatHash)
+                return true;
+
             return false;
         }
 
+        private String byteToString(byte[] bytes) {
+            StringBuilder sb = new StringBuilder();
+            for (byte b : bytes)
+                sb.append(Integer.toHexString((int) (b & 0xff)));
+
+            return sb.toString();
+        }
     }
 }

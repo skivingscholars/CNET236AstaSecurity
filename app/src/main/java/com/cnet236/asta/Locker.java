@@ -108,12 +108,6 @@ public class Locker {
             }
             writeData(salt, fileName) ;
         }
-
-        StringBuilder sb = new StringBuilder();
-        for (byte b : salt)
-            sb.append(Integer.toHexString((int) (b & 0xff)));
-
-        Log.v("Unlocker", sb.toString());
         return salt;
     }
 
