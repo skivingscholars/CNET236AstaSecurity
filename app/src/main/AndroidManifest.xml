@@ -13,6 +13,7 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,8 +39,8 @@
                 android:value="com.cnet236.asta.ControlListActivity" />
         </activity>
         <activity
-            android:name="com.cnet236.asta.PasswordActivity"
-            android:label="@string/title_activity_password"
+            android:name="com.cnet236.asta.NewPasswordActivity"
+            android:label="@string/title_activity_new_password"
             android:parentActivityName="com.cnet236.asta.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -77,7 +77,7 @@ public class LoginActivity extends Activity {
             Log.v("Unlocker", "Previous run detected.");
         } catch(FileNotFoundException e) {
             Log.v("Unlocker", "First run detected");
-            Intent i = new Intent(LoginActivity.this, PasswordActivity.class);
+            Intent i = new Intent(LoginActivity.this, NewPasswordActivity.class);
             LoginActivity.this.startActivity(i);
         }
 
