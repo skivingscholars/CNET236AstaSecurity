@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,9 +17,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 /**
  * Activity which displays a login screen to the user
@@ -195,11 +194,8 @@ public class LoginActivity extends Activity {
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             EditText textV;
             try {
-                // TODO: code in auth process take pw -> create key -> get hash of key -> get hash of actual key from file -> compare hashes -> reject ? proceed with new activity
-
                 textV = (EditText) findViewById(R.id.password);
                 String password = textV.getText().toString();
                 Log.v("Unlocker", "password challenge: " + password);
@@ -243,11 +239,11 @@ public class LoginActivity extends Activity {
 
         private boolean checkHash(byte[] diplomatHash) {
             FileInputStream allowed;
-            byte[] allowedHash = new byte[256];
+            byte[] allowedHash = new byte[32];
 
             try {
                 allowed = getApplicationContext().openFileInput("allowedHash");
-                allowed.read(allowedHash, 0, 256);
+                allowed.read(allowedHash, 0, 32);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -255,7 +251,7 @@ public class LoginActivity extends Activity {
             Log.v("Unlocker", "diplomatHash = "+byteToString(diplomatHash));
             Log.v("Unlocker", "allowedHash =  "+byteToString(allowedHash));
 
-            if(allowedHash == diplomatHash)
+            if(Arrays.equals(allowedHash, diplomatHash))
                 return true;
 
             return false;
@@ -264,7 +260,7 @@ public class LoginActivity extends Activity {
         private String byteToString(byte[] bytes) {
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes)
-                sb.append(Integer.toHexString((int) (b & 0xff)));
+                sb.append(Integer.toHexString((b & 0xff)));
 
             return sb.toString();
         }
