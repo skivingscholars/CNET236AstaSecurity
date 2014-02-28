@@ -3,26 +3,27 @@ package com.cnet236.asta;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
 /**
- * An activity representing a list of Controls. This activity
+ * An activity representing a list of Tests. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ControlDetailActivity} representing
+ * lead to a {@link TestDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  * <p>
  * The activity makes heavy use of fragments. The list of items is a
- * {@link ControlListFragment} and the item details
- * (if present) is a {@link ControlDetailFragment}.
+ * {@link TestListFragment} and the item details
+ * (if present) is a {@link TestDetailFragment}.
  * <p>
  * This activity also implements the required
- * {@link ControlListFragment.Callbacks} interface
+ * {@link TestListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class ControlListActivity extends FragmentActivity
-        implements ControlListFragment.Callbacks {
+public class TestListActivity extends FragmentActivity
+        implements TestListFragment.Callbacks {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -33,9 +34,11 @@ public class ControlListActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_control_list);
+        setContentView(R.layout.activity_test_list);
+        // Show the Up button in the action bar.
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (findViewById(R.id.control_detail_container) != null) {
+        if (findViewById(R.id.test_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
             // res/values-sw600dp). If this view is present, then the
@@ -44,16 +47,33 @@ public class ControlListActivity extends FragmentActivity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((ControlListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.control_list))
+            ((TestListFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.test_list))
                     .setActivateOnItemClick(true);
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
-     * Callback method from {@link ControlListFragment.Callbacks}
+     * Callback method from {@link TestListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
      */
     @Override
@@ -63,18 +83,18 @@ public class ControlListActivity extends FragmentActivity
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ControlDetailFragment.ARG_ITEM_ID, id);
-            ControlDetailFragment fragment = new ControlDetailFragment();
+            arguments.putString(TestDetailFragment.ARG_ITEM_ID, id);
+            TestDetailFragment fragment = new TestDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.control_detail_container, fragment)
+                    .replace(R.id.test_detail_container, fragment)
                     .commit();
 
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, ControlDetailActivity.class);
-            detailIntent.putExtra(ControlDetailFragment.ARG_ITEM_ID, id);
+            Intent detailIntent = new Intent(this, TestDetailActivity.class);
+            detailIntent.putExtra(TestDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
     }

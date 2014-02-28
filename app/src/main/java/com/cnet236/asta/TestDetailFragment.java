@@ -10,12 +10,12 @@ import android.widget.TextView;
 import com.cnet236.asta.dummy.DummyContent;
 
 /**
- * A fragment representing a single Control detail screen.
- * This fragment is either contained in a {@link ControlListActivity}
- * in two-pane mode (on tablets) or a {@link ControlDetailActivity}
+ * A fragment representing a single Test detail screen.
+ * This fragment is either contained in a {@link TestListActivity}
+ * in two-pane mode (on tablets) or a {@link TestDetailActivity}
  * on handsets.
  */
-public class ControlDetailFragment extends Fragment {
+public class TestDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -31,7 +31,7 @@ public class ControlDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ControlDetailFragment() {
+    public TestDetailFragment() {
     }
 
     @Override
@@ -49,11 +49,11 @@ public class ControlDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_control_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_test_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.control_detail)).setText(mItem.content);
+            ((TextView) rootView.findViewById(R.id.test_detail)).setText(mItem.content);
         }
 
         return rootView;

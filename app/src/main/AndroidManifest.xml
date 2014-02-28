@@ -22,29 +22,20 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.cnet236.asta.ControlListActivity"
-            android:label="@string/title_control_list" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.cnet236.asta.ControlDetailActivity"
-            android:label="@string/title_control_detail"
-            android:parentActivityName="com.cnet236.asta.ControlListActivity" >
+            android:name="com.cnet236.asta.TestListActivity"
+            android:label="@string/title_test_list"
+            android:parentActivityName="com.cnet236.asta.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cnet236.asta.ControlListActivity" />
+                android:value="com.cnet236.asta.MainActivity" />
         </activity>
         <activity
-            android:name="com.cnet236.asta.NewPasswordActivity"
-            android:label="@string/title_activity_new_password"
-            android:parentActivityName="com.cnet236.asta.LoginActivity" >
+            android:name="com.cnet236.asta.TestDetailActivity"
+            android:label="@string/title_test_detail"
+            android:parentActivityName="com.cnet236.asta.TestListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="LoginActivity" />
+                android:value="com.cnet236.asta.TestListActivity" />
         </activity>
     </application>
 

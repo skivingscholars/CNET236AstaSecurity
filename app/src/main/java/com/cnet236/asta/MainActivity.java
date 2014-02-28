@@ -1,5 +1,6 @@
 package com.cnet236.asta;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,11 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void openDetails(View view) {
+        Intent i = new Intent(MainActivity.this, TestListActivity.class);
+        MainActivity.this.startActivity(i);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -57,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
             return rootView;
         }
     }
