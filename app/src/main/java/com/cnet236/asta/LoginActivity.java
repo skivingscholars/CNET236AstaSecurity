@@ -79,7 +79,7 @@ public class LoginActivity extends Activity {
             Intent i = new Intent(LoginActivity.this, NewPasswordActivity.class);
             LoginActivity.this.startActivity(i);
         }
-
+        Log.v("LoginActivity", "onCreate finished");
     }
 
 
@@ -186,9 +186,9 @@ public class LoginActivity extends Activity {
             EditText textV;
             try {
                 textV = (EditText) findViewById(R.id.password);
-                String password = textV.getText().toString();
-                Log.v("Unlocker", "password challenge: " + password);
-                Locker diplomat = new Locker("diplomat", password, getApplicationContext());
+                mPassword = textV.getText().toString();
+                Log.v("Unlocker", "password challenge: " + mPassword);
+                Locker diplomat = new Locker("diplomat", mPassword, getApplicationContext());
                 return checkHash(diplomat.getKeyHash());
                 /*Locker guard = new Locker("guard", "password", getApplicationContext());
                 if (guard.equals(diplomat) == true) {
@@ -213,6 +213,7 @@ public class LoginActivity extends Activity {
 
             if (success) {
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                i.putExtra("password", mPassword);
                 LoginActivity.this.startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

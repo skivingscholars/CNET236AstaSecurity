@@ -11,40 +11,42 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class TestContent {
 
     /**
      * An array of sample (dummy) items.
      */
-    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static List<TestResult> ITEMS = new ArrayList<TestResult>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static Map<String, TestResult> ITEM_MAP = new HashMap<String, TestResult>();
 
     static {
         // Add 3 sample items.
-        addItem(new DummyItem("1", "Item 1"));
-        addItem(new DummyItem("2", "Item 2"));
-        addItem(new DummyItem("3", "Item 3"));
+        addItem(new TestResult("1", "Item 1", 0));
+        addItem(new TestResult("2", "Item 2", 1));
+        addItem(new TestResult("3", "Item 3", 1));
     }
 
-    private static void addItem(DummyItem item) {
+    private static void addItem(TestResult item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+        ITEM_MAP.put(item.testName, item);
     }
 
     /**
      * A dummy item representing a piece of content.
      */
-    public static class DummyItem {
-        public String id;
+    public static class TestResult {
+        public String testName;
         public String content;
+        public int colour;
 
-        public DummyItem(String id, String content) {
-            this.id = id;
+        public TestResult(String name, String content, int colour) {
+            this.testName = name;
             this.content = content;
+            this.colour = colour;
         }
 
         @Override

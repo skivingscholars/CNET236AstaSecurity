@@ -1,12 +1,15 @@
 package com.cnet236.asta;
 
+import android.os.Parcel;
+
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by thedestroyer on 01/03/14.
 */
 public class HoneypotTest extends Test {
-    HoneypotTest(Locker results, Lock resultsLock, Locker testStorage) {
+    HoneypotTest(Locker results, ReentrantLock resultsLock, Locker testStorage) {
         name = "Honeypot Checker";
         resultsFile = results;
         resultsFileLock = resultsLock;

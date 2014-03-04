@@ -1,6 +1,8 @@
 package com.cnet236.asta;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
 
@@ -19,18 +21,31 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Locker {
     private SecretKey key;
-    private final String target;
+    private String target;
     private String fileData;
-    private final Context current;
+    private Context current;
 
     Locker(String fileName, String password, Context context) {
         current = context;
         target = fileName;
         generateKey(password);
         populateFileData();
+    }
+
+    Locker(Parcel p) {
+        Log.v("Unlocker", "Unparcelling...");
+        byte[] b = new byte[p.readInt()];
+
+        p.readByteArray(b);
+        Log.v("Unlocker", "Got bytes: " + b.length);
+        key = new SecretKeySpec(b, 0, b.length, "AES/CBC/PKCS5Padding");
+        target = p.readString();
+        fileData = p.readString();
+        Log.v("Unlocker", "Got to the end");
     }
 
     private void populateFileData() {
@@ -139,6 +154,10 @@ public class Locker {
     public void setFileData(String data) {
         fileData = data;
         encryptFileData();
+    }
+
+    public void setContext(Context c) {
+        this.current = c;
     }
 
     public String getFileData() {

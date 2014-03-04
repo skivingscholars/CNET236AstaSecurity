@@ -1,12 +1,16 @@
 package com.cnet236.asta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.io.FileInputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by thedestroyer on 28/02/14.
@@ -14,13 +18,38 @@ import java.util.concurrent.locks.Lock;
 public class TripCheckTest extends Test {
     ArrayList<ArrayList<String>> files = new ArrayList<ArrayList<String>>();
 
-    TripCheckTest(Locker results, Lock resultsLock, Locker testStorage) {
+    TripCheckTest(Locker results, ReentrantLock resultsLock, Locker testStorage) {
         name = "Integrity Checker";
         resultsFile = results;
         resultsFileLock = resultsLock;
         thisStorage = testStorage;
 
         populateFiles();
+    }
+
+    TripCheckTest(Parcel source) {
+        Log.v("TripCheckTest", "Unparcelling");
+        additional = source.readString();
+        name = source.readString();
+        colour = source.readInt();
+        resultsFile = (Locker)source.readValue(getClass().getClassLoader());
+        resultsFileLock = (ReentrantLock)source.readSerializable();
+        int filesCount = source.readInt();
+        Log.v(name, "files size: " + filesCount);
+
+        if(filesCount > 0) {
+            files = new ArrayList<ArrayList<String>>();
+            for(int i = 0; i < filesCount; i++) {
+                ArrayList<String> s = new ArrayList<String>();
+                String[] temp = null;
+                source.readStringArray(temp);
+                Collections.addAll(s, temp);
+                files.add(s);
+            }
+        } else {
+            files = new ArrayList<ArrayList<String>>();
+        }
+        Log.v("name", "Got to the end");
     }
 
     @Override
@@ -49,17 +78,38 @@ public class TripCheckTest extends Test {
         }
 
         results = resultsFile.getFileData().split("\n");
-        results[0] = name+":"+additional;
+        results[0] = name+":"+additional+":"+colour;
 
         for(String s: results)
             temp += s;
 
         resultsFile.setFileData(temp);
+        resultsFileLock.unlock();
     }
 
     @Override
     public void run() {
-        checkFiles();
+        ArrayList<String> filesChanged;
+
+        filesChanged = checkFiles();
+        additional = filesChanged.size() + " files changed.";
+
+        if(filesChanged.size() != 0) {
+            additional += "\nThey are:\n";
+            for(String s: filesChanged) {
+                additional += s;
+                additional += "\n";
+            }
+
+            if(filesChanged.size() > 4)
+                colour = 2;
+            else
+                colour = 1;
+        }
+        else {
+            colour = 0;
+        }
+
         updateLocker();
         updateResults();
     }
@@ -69,9 +119,13 @@ public class TripCheckTest extends Test {
 
         for(int file = 0; file < lines.length; file++) {
             String[] fileHash = lines[file].split(":");
+
+            if(fileHash.length < 2)
+                return;
+
             ArrayList<String> temp = new ArrayList<String>();
-            temp.add(0, fileHash[0]);
-            temp.add(1, fileHash[1]);
+            temp.add(fileHash[0]);
+            temp.add(fileHash[1]);
 
             files.add(temp);
         }

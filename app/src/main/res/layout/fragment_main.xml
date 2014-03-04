@@ -8,14 +8,109 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.cnet236.asta.MainActivity$PlaceholderFragment">
 
-    <Button
+    <LinearLayout android:id="@+id/test_status"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Details"
-        android:id="@+id/btnDetails"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="119dp"
-        android:onClick="openDetails"/>
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ProgressBar style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+        <TextView
+            android:id="@+id/login_status_message"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Running tests." />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/results_activity"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="GREEN: "
+            android:id="@+id/greenText"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btnDetails" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txtGreenNum"
+            android:layout_alignTop="@+id/greenText"
+            android:layout_alignLeft="@+id/btnDetails" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="YELLOW: "
+            android:id="@+id/yellowtext"
+            android:layout_below="@+id/greenText"
+            android:layout_alignLeft="@+id/greenText"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txtYellowNum"
+            android:layout_alignTop="@+id/yellowtext"
+            android:layout_toRightOf="@+id/yellowtext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="RED: "
+            android:id="@+id/redText"
+            android:layout_below="@+id/yellowtext"
+            android:layout_alignLeft="@+id/yellowtext"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txtRedNum"
+            android:layout_below="@+id/txtYellowNum"
+            android:layout_toRightOf="@+id/yellowtext" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Run tests"
+            android:id="@+id/btnRunTests"
+            android:layout_gravity="center_horizontal"
+            android:onClick="runTests" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:id="@+id/btnDetails"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="119dp"
+            android:onClick="openDetails" />
+
+    </LinearLayout>
 </RelativeLayout>
