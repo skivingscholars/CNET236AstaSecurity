@@ -23,14 +23,14 @@ public class TestContent {
      */
     public static Map<String, TestResult> ITEM_MAP = new HashMap<String, TestResult>();
 
-    static {
+    /*static {
         // Add 3 sample items.
         addItem(new TestResult("1", "Item 1", 0));
         addItem(new TestResult("2", "Item 2", 1));
         addItem(new TestResult("3", "Item 3", 1));
-    }
+    }*/
 
-    private static void addItem(TestResult item) {
+    public static void addItem(TestResult item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.testName, item);
     }
@@ -51,7 +51,7 @@ public class TestContent {
 
         @Override
         public String toString() {
-            return content;
+            return testName;
         }
     }
 }

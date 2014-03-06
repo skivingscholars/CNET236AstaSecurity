@@ -157,6 +157,9 @@ public class MainActivity extends ActionBarActivity {
                     break;
             }
 
+            for(TestContent.TestResult t: results)
+                TestContent.addItem(t);
+
             showProgress(false);
         }
     }
