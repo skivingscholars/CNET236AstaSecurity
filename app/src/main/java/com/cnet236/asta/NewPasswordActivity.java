@@ -2,23 +2,33 @@ package com.cnet236.asta;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.FileOutputStream;
 
 public class NewPasswordActivity extends ActionBarActivity {
+    static String oldPW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_password);
+
+        Bundle b = this.getIntent().getExtras();
+
+        if(b != null) {
+            oldPW = b.getString("pw");
+            switchToChangePassword();
+        }
     }
 
 
@@ -70,5 +80,45 @@ public class NewPasswordActivity extends ActionBarActivity {
 
         Intent i = new Intent(NewPasswordActivity.this, LoginActivity.class);
         NewPasswordActivity.this.startActivity(i);
+    }
+
+    private void switchToChangePassword() {
+        Button b = (Button)findViewById(R.id.btnSavePassword);
+
+
+        b.setText("Confirm new password");
+        b.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                String[] s = {"results", "TripTestFile"};
+                String newPW = ((EditText)findViewById(R.id.password)).getText().toString();
+                String confirmPW = ((EditText)findViewById(R.id.confirmPassword)).getText().toString();
+
+                if(newPW.equals(confirmPW)) {
+                    for (String string: s) {
+                        Locker l = new Locker(string, oldPW, getApplicationContext());
+                        l.changePassword(newPW);
+                        try {
+                            FileOutputStream file = getApplicationContext().openFileOutput("allowedHash", Context.MODE_PRIVATE);
+                            byte[] hash = l.getKeyHash();
+                            file.write(hash, 0, hash.length);
+                            file.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return;
+                        }
+                        Intent i = new Intent(NewPasswordActivity.this, MainActivity.class);
+                        i.putExtra("password", newPW);
+                        NewPasswordActivity.this.startActivity(i);
+                    }
+                } else {
+                    Log.v("cnet236NewPassword", "testing: " + newPW + " : " + confirmPW);
+                    EditText pass = (EditText) findViewById(R.id.password);
+                    pass.setError(getString(R.string.passwordsdontmatch));
+                    pass.requestFocus();
+                    return;
+                }
+            }
+        });
     }
 }

@@ -1,0 +1,30 @@
+<resources>
+    <!-- Strings related to Settings -->
+
+    <string name="pref_header_tests">Tests</string>
+
+    <string name="pref_title_test_frequency">Test frequency</string>
+    <string-array name="pref_test_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_test_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_int_check">Integrity Checker</string>
+    <string name="pref_title_motd">MOTD</string>
+    <string name="pref_title_honey_check">Honeypot checker</string>
+
+    <string name="pref_header_change_password">Change password</string>
+    <string name="pref_title_password">Change password</string>
+</resources>

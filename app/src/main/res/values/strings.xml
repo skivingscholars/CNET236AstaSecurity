@@ -10,5 +10,6 @@
     <string name="title_activity_new_password">NewPasswordActivity</string>
     <string name="title_test_list">Tests</string>
     <string name="title_test_detail">Test Detail</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>

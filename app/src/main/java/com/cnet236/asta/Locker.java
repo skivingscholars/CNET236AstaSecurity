@@ -215,6 +215,11 @@ public class Locker {
         }
     }
 
+    public void changePassword(String newPW) {
+        generateKey(newPW);
+        encryptFileData();
+    }
+
     public boolean equals(Locker other) {
         StringBuffer thissb = new StringBuffer();
         StringBuffer othersb = new StringBuffer();

@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.cnet236.asta.SettingsActivity$PlaceholderFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Change Password"
+        android:id="@+id/txtCPW"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/txtOldPW"
+        android:layout_gravity="center"
+        android:layout_marginTop="33dp"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Password"
+        android:id="@+id/btnCPW"
+        android:layout_gravity="center"
+        android:layout_marginTop="36dp"
+        android:onClick="tryNewPassword"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/linearLayout" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Test Settings"
+            android:id="@+id/txtTests" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable Message Of The Day"
+            android:id="@+id/chkMOTD"
+            android:layout_below="@+id/chkHF"
+            android:layout_alignParentLeft="true"
+            android:checked="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable Honeypot file"
+            android:id="@+id/chkHF"
+            android:layout_below="@+id/chkIC"
+            android:layout_alignParentLeft="true"
+            android:checked="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable Integrity Checker"
+            android:id="@+id/chkIC"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:checked="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/btnSaveTests"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignLeft="@+id/btnCPW"
+            android:layout_marginTop="41dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Enter old password:"
+        android:id="@+id/textView"
+        android:layout_alignBottom="@+id/txtOldPW"
+        android:layout_alignParentLeft="true" />
+
+</RelativeLayout>

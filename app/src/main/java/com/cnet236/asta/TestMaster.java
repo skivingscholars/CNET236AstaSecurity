@@ -15,8 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by thedestroyer on 02/03/14.
  */
-public class TestMaster implements Parcelable {
-    private ArrayList<Test> tests;
+public class TestMaster{
+    private  ArrayList<Test> tests;
     private Locker resultsFile;
     private ReentrantLock resultsFileLock;
     private String password;
@@ -28,16 +28,9 @@ public class TestMaster implements Parcelable {
         addTests(password, context);
     }
 
-    TestMaster(Parcel p) {
-        Log.v("TestMaster", "Unparcelling");
-        this.password = p.readString();
-        tests = new ArrayList<Test>();
-        resultsFileLock = new ReentrantLock();
-    }
-
     private void addTests(String p, Context c) {
         tests.add(0, new TripCheckTest(resultsFile, resultsFileLock, new Locker("TripTestFile", p, c)));
-    }
+    } //TODO: remember to add file names to array in newpasswordactivity
 
     public void fillInDetails(Context c) {
         resultsFile = new Locker("results", this.password, c);
@@ -59,7 +52,7 @@ public class TestMaster implements Parcelable {
         }
     }
 
-    public ArrayList<TestContent.TestResult> getResults() {
+    public ArrayList<TestContent.TestResult> getResults() { //deprecated
         ArrayList<TestContent.TestResult> results = new ArrayList<TestContent.TestResult>();
         String resultsFileContent;
         String[] eachResult;
@@ -83,24 +76,4 @@ public class TestMaster implements Parcelable {
 
         return results;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        Log.v("TestMaster", "writing to parcel: " + i);
-        parcel.writeString(this.password);
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public TestMaster createFromParcel(Parcel source) {
-            return new TestMaster(source);
-        }
-        public TestMaster[] newArray(int size) {
-            return new TestMaster[size];
-        }
-    };
 }
