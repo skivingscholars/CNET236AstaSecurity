@@ -80,8 +80,10 @@ public class TripCheckTest extends Test {
         results = resultsFile.getFileData().split("\n");
         results[0] = name+":"+additional+":"+colour;
 
-        for(String s: results)
+        for(String s: results) {
             temp += s;
+            temp += "\n";
+        }
 
         resultsFile.setFileData(temp);
         resultsFileLock.unlock();
