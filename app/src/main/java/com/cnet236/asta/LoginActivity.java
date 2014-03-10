@@ -213,6 +213,7 @@ public class LoginActivity extends Activity {
 
             if (success) {
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                i.putExtra("from", "login");
                 i.putExtra("password", mPassword);
                 LoginActivity.this.startActivity(i);
             } else {

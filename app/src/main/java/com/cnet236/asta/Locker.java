@@ -36,16 +36,15 @@ public class Locker {
         populateFileData();
     }
 
-    Locker(Parcel p) {
-        Log.v("Unlocker", "Unparcelling...");
-        byte[] b = new byte[p.readInt()];
+    Locker(String fileName, byte[] key, Context context) {
+        current = context;
+        target = fileName;
+        this.key = new SecretKeySpec(key, 0, key.length, "AES");
+        populateFileData();
+    }
 
-        p.readByteArray(b);
-        Log.v("Unlocker", "Got bytes: " + b.length);
-        key = new SecretKeySpec(b, 0, b.length, "AES/CBC/PKCS5Padding");
-        target = p.readString();
-        fileData = p.readString();
-        Log.v("Unlocker", "Got to the end");
+    public byte[] getKey() {
+        return key.getEncoded();
     }
 
     private void populateFileData() {

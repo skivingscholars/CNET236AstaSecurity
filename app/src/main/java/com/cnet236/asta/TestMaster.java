@@ -28,13 +28,25 @@ public class TestMaster{
         addTests(password, context);
     }
 
+    TestMaster(byte[] key, Context context) {
+        tests = new ArrayList<Test>();
+        resultsFile = new Locker("results", key, context);
+        resultsFileLock = new ReentrantLock();
+        addTests(key, context);
+    }
+
     private void addTests(String p, Context c) {
         tests.add(0, new TripCheckTest(resultsFile, resultsFileLock, new Locker("TripTestFile", p, c)));
+        tests.add(1, new HoneypotTest(resultsFile, resultsFileLock, new Locker("HoneypotFile", p, c)));
     } //TODO: remember to add file names to array in newpasswordactivity
 
-    public void fillInDetails(Context c) {
-        resultsFile = new Locker("results", this.password, c);
-        addTests(this.password, c);
+    private void addTests(byte[] key, Context c) {
+        tests.add(0, new TripCheckTest(resultsFile, resultsFileLock, new Locker("TripTestFile", key, c)));
+        tests.add(1, new HoneypotTest(resultsFile, resultsFileLock, new Locker("HoneypotFile", key, c)));
+    } //TODO: remember to add file names to array in newpasswordactivity
+
+    public byte[] getKey() {
+        return resultsFile.getKey();
     }
 
     public void runTests() {
@@ -52,7 +64,7 @@ public class TestMaster{
         }
     }
 
-    public ArrayList<TestContent.TestResult> getResults() { //deprecated
+    public ArrayList<TestContent.TestResult> getResults() {
         ArrayList<TestContent.TestResult> results = new ArrayList<TestContent.TestResult>();
         String resultsFileContent;
         String[] eachResult;
@@ -60,18 +72,22 @@ public class TestMaster{
         try {
             resultsFileLock.lockInterruptibly();
             resultsFileContent = resultsFile.getFileData();
+            resultsFileLock.unlock();
             eachResult = resultsFileContent.split("\n");
 
             if(eachResult.length < 1)
                 return results;
 
             for(String s: eachResult) {
+                Log.v("TestMaster", "eachresult: " + s);
                 String[] nameAdditional = s.split(":");
                 int colour = Integer.parseInt(nameAdditional[2]);
                 results.add(new TestContent.TestResult(nameAdditional[0], nameAdditional[1], colour));
             }
         } catch (InterruptedException e) {
             Log.v("TestMaster", "getting results interrupted");
+        } catch(ArrayIndexOutOfBoundsException e) {
+            return results;
         }
 
         return results;

@@ -85,6 +85,9 @@ public class TripCheckTest extends Test {
             temp += "\n";
         }
 
+        for(int i = 0; i < 3-results.length; i++)
+            temp+="a\n";
+
         resultsFile.setFileData(temp);
         resultsFileLock.unlock();
     }
@@ -114,6 +117,8 @@ public class TripCheckTest extends Test {
 
         updateLocker();
         updateResults();
+
+        Log.v("TripCheckTest", colour + " : " + additional);
     }
 
     private void populateFiles() { //files split by newline, name and hash split by :

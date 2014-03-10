@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 
 public class SettingsActivity extends ActionBarActivity {
+    byte[] key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,8 @@ public class SettingsActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        key = this.getIntent().getByteArrayExtra("key");
     }
 
     public void tryNewPassword(View view) {
@@ -88,7 +91,15 @@ public class SettingsActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == android.R.id.home) {
+            Log.v("settingsAct", "putting key back to main");
+            Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+            i.putExtra("from", "setting");
+            i.putExtra("key", key);
+            SettingsActivity.this.startActivity(i);
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

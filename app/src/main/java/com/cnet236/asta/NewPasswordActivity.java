@@ -90,7 +90,7 @@ public class NewPasswordActivity extends ActionBarActivity {
         b.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                String[] s = {"results", "TripTestFile"};
+                String[] s = {"results", "TripTestFile", "HoneypotFile"};
                 String newPW = ((EditText)findViewById(R.id.password)).getText().toString();
                 String confirmPW = ((EditText)findViewById(R.id.confirmPassword)).getText().toString();
 
@@ -108,6 +108,7 @@ public class NewPasswordActivity extends ActionBarActivity {
                             return;
                         }
                         Intent i = new Intent(NewPasswordActivity.this, MainActivity.class);
+                        i.putExtra("from", "newpassword");
                         i.putExtra("password", newPW);
                         NewPasswordActivity.this.startActivity(i);
                     }

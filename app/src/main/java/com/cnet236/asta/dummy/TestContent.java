@@ -35,6 +35,11 @@ public class TestContent {
         ITEM_MAP.put(item.testName, item);
     }
 
+    public static void clearList() {
+        ITEMS.clear();
+        ITEM_MAP.clear();
+    }
+
     /**
      * A dummy item representing a piece of content.
      */

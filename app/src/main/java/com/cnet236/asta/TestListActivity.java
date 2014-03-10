@@ -25,11 +25,13 @@ import android.view.MenuItem;
 public class TestListActivity extends FragmentActivity
         implements TestListFragment.Callbacks {
 
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
+    byte[] key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,10 @@ public class TestListActivity extends FragmentActivity
                     .setActivateOnItemClick(true);
         }
 
+        Bundle b = this.getIntent().getExtras();
+        if(b!=null)
+            key = b.getByteArray("key");
+
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
@@ -66,7 +72,11 @@ public class TestListActivity extends FragmentActivity
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpFromSameTask(this);
+            //NavUtils.navigateUpFromSameTask(this);
+            Intent i = new Intent(TestListActivity.this, MainActivity.class);
+            i.putExtra("key", this.key);
+            i.putExtra("from", "details");
+            TestListActivity.this.startActivity(i);
             return true;
         }
         return super.onOptionsItemSelected(item);

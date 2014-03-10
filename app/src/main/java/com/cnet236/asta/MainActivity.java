@@ -36,9 +36,43 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
 
-        Bundle b = this.getIntent().getExtras();
-        if(b!=null)
-            tm = new TestMaster(b.getString("password"), getApplicationContext());
+        Bundle bu = this.getIntent().getExtras();
+        if(bu.getString("from").equals("login") || bu.getString("from").equals("newpassword"))
+            tm = new TestMaster(bu.getString("password"), getApplicationContext());
+        else
+            tm = new TestMaster(bu.getByteArray("key"), getApplicationContext());
+    }
+
+    public void addResults() {
+        ArrayList<TestContent.TestResult> results = tm.getResults();
+        TextView temp;
+        int g=0, y=0, r=0;
+
+        for (TestContent.TestResult t: results) {
+            switch(t.colour) {
+                case 0:
+                    g++;
+                    break;
+                case 1:
+                    y++;
+                    break;
+                case 2:
+                    r++;
+                    break;
+            }
+        }
+
+        temp = (TextView)findViewById(R.id.txtGreenNum);
+        temp.setText(Integer.toString(g).toCharArray(), 0, 1);
+
+        temp = (TextView)findViewById(R.id.txtYellowNum);
+        temp.setText(Integer.toString(y).toCharArray(), 0, 1);
+
+        temp = (TextView)findViewById(R.id.txtRedNum);
+        temp.setText(Integer.toString(r).toCharArray(), 0, 1);
+
+        for(TestContent.TestResult t: results)
+            TestContent.addItem(t);
     }
 
 
@@ -46,6 +80,9 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        addResults();
+
         return true;
     }
 
@@ -57,6 +94,7 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            i.putExtra("key", tm.getKey());
             MainActivity.this.startActivity(i);
             return true;
         }
@@ -65,6 +103,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void openDetails(View view) {
         Intent i = new Intent(MainActivity.this, TestListActivity.class);
+        i.putExtra("key", tm.getKey());
         MainActivity.this.startActivity(i);
     }
 
@@ -143,21 +182,32 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(final Boolean success) {
             ArrayList<TestContent.TestResult> results = tm.getResults();
             TextView temp;
+            int g=0, y=0, r=0;
 
-            switch(results.get(0).colour) {
-                case 0:
-                    temp = (TextView)findViewById(R.id.txtGreenNum);
-                    temp.setText("1".toCharArray(), 0, 1);
-                    break;
-                case 1:
-                    temp = (TextView)findViewById(R.id.txtYellowNum);
-                    temp.setText("1".toCharArray(), 0, 1);
-                    break;
-                case 2:
-                    temp = (TextView)findViewById(R.id.txtRedNum);
-                    temp.setText("1".toCharArray(), 0, 1);
-                    break;
+            TestContent.clearList();
+
+            for (TestContent.TestResult t: results) {
+                switch(t.colour) {
+                    case 0:
+                        g++;
+                        break;
+                    case 1:
+                        y++;
+                        break;
+                    case 2:
+                        r++;
+                        break;
+                }
             }
+
+            temp = (TextView)findViewById(R.id.txtGreenNum);
+            temp.setText(Integer.toString(g).toCharArray(), 0, 1);
+
+            temp = (TextView)findViewById(R.id.txtYellowNum);
+            temp.setText(Integer.toString(y).toCharArray(), 0, 1);
+
+            temp = (TextView)findViewById(R.id.txtRedNum);
+            temp.setText(Integer.toString(r).toCharArray(), 0, 1);
 
             for(TestContent.TestResult t: results)
                 TestContent.addItem(t);
