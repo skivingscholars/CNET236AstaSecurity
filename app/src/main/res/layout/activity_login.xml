@@ -36,6 +36,15 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/username"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="359dp"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:imeOptions="actionUnspecified" />
+
+            <EditText
                 android:id="@+id/password"
                 android:singleLine="true"
                 android:maxLines="1"
@@ -55,6 +64,14 @@
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:id="@+id/btnRegister"
+                android:layout_gravity="center_horizontal"
+                android:onClick="registerUser"/>
 
         </LinearLayout>
 

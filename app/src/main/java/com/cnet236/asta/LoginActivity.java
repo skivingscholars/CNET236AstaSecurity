@@ -17,9 +17,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.cnet236.asta.dummy.TestContent;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Activity which displays a login screen to the user
@@ -136,6 +145,11 @@ public class LoginActivity extends Activity {
         }
     }
 
+    public void registerUser (View view) {
+        Intent i = new Intent(LoginActivity.this, NewPasswordActivity.class);
+        LoginActivity.this.startActivity(i);
+    }
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -184,12 +198,19 @@ public class LoginActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
             EditText textV;
+
             try {
                 textV = (EditText) findViewById(R.id.password);
                 mPassword = textV.getText().toString();
-                Log.v("Unlocker", "password challenge: " + mPassword);
+
+                String mUsername = ((EditText)findViewById(R.id.username)).getText().toString();
+
+                Log.v("Unlocker", "password challenge: " + mPassword + " - " + mUsername);
                 Locker diplomat = new Locker("diplomat", mPassword, getApplicationContext());
-                return checkHash(diplomat.getKeyHash());
+                String hash = byteToString(diplomat.getKeyHash());
+                Log.v("Unlocker", "hash: " + hash);
+                return tryAuth(mUsername, hash);
+                //return checkHash(diplomat.getKeyHash());
                 /*Locker guard = new Locker("guard", "password", getApplicationContext());
                 if (guard.equals(diplomat) == true) {
                     Log.i("Unlocker", "auth: allowed");
@@ -254,6 +275,48 @@ public class LoginActivity extends Activity {
                 sb.append(Integer.toHexString((b & 0xff)));
 
             return sb.toString();
+        }
+
+        private boolean tryAuth(String name, String hash) {
+            StringBuffer response = null;
+
+            try {
+                String url = "http://"+ TestContent.authHost+"/api.php";
+                URL obj = new URL(url);
+                //HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                //add reuqest header
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+                String urlParameters = "action=auth&n="+name+"&h="+hash;
+
+                // Send post request
+                con.setDoOutput(true);
+                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+                wr.writeBytes(urlParameters);
+                wr.flush();
+                wr.close();
+
+                int responseCode = con.getResponseCode();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.v("auth", "response - " + response.toString());
+
+            if(response.toString().equals("success"))
+                return true;
+            else
+                return false;
         }
     }
 }
