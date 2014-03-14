@@ -12,7 +12,7 @@ import java.util.Map;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class TestContent {
-    public static String authHost = "10.0.1.10";
+    public static String authHost = "192.168.43.222";
     /**
      * An array of sample (dummy) items.
      */

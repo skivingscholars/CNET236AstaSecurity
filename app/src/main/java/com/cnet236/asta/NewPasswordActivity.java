@@ -187,6 +187,10 @@ public class NewPasswordActivity extends ActionBarActivity {
                     response.append(inputLine);
                 }
                 in.close();
+
+                FileOutputStream file = getApplicationContext().openFileOutput("allowedHash", Context.MODE_PRIVATE);
+                file.write("user registered".getBytes(), 0, "user registered".length());
+                file.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
